@@ -10,8 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["ben"]
   s.email       = 'ben@arc.dev'
   s.files = `git ls-files`.split($/)
-  s.homepage    =
-  'https://github.com/codementordev/cm_lograge_formatter'
+  s.homepage    = 'https://github.com/CodementorIO/cm_logger'
   s.license       = 'MIT'
   s.required_ruby_version = '>= 2.6'
 
