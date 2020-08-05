@@ -1,38 +1,46 @@
-require 'logger'
-require 'time'
+require 'sidekiq'
 
 module CmLogger
-  class SidekiqFormatter < Logger::Formatter
+  class SidekiqFormatter < ::Sidekiq::Logger::Formatters::Base
     def call(severity, time, program_name, message)
-      clean_message = message.gsub('"', '\'').gsub("\n", ' ').slice(0, 100)
-
       log_hash = {
         time: time.utc.iso8601(3),
         pid: ::Process.pid,
-        tid: Thread.current.object_id.to_s(36),
+        tid: tid,
         severity: severity,
-        message: "\"#{clean_message}\""
-      }.merge(context)
+        message: message,
+        worker_name: extract_worker_name,
+        jid: extract_jid,
+        elapsed: extract_elapsed
+      }.compact
 
       log_hash.keys.map do |key|
-        "#{key}=#{log_hash[key]}"
+        "#{key}=#{sanitize(log_hash[key])}"
       end.join(" ") + "\n"
     end
 
-    def context
-      c = Thread.current[:sidekiq_context]
-      if c && c.any?
-        tokens = c.map(&:split).flatten
-        worker_name = tokens.find { |token| token.end_with?('Worker') }
-        jid = tokens.find { |token| token.start_with?('JID') }
+    private
 
-        {
-          worker_name: worker_name,
-          jid: jid
-        }.compact
+    def sanitize(message)
+      result = message.to_s.gsub('"', '\'').gsub("\n", ' ').slice(0, 100)
+
+      if /\s/.match?(result)
+        "\"#{result}\""
       else
-        {}
+        result
       end
+    end
+
+    def extract_worker_name
+      ctx[:class]
+    end
+
+    def extract_jid
+      ctx[:jid]
+    end
+
+    def extract_elapsed
+      ctx[:elapsed]
     end
   end
 end

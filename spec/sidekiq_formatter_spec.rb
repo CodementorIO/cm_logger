@@ -6,7 +6,7 @@ describe 'CmLogger::SidekiqFormatter' do
       CmLogger::SidekiqFormatter.new
     end
     let(:severity) { "INFO" }
-    let(:message) { "xxx" }
+    let(:message) { "xxx xxx" }
     let(:time) { Time.now }
     let(:program_name) { "program_name" }
 
@@ -15,9 +15,8 @@ describe 'CmLogger::SidekiqFormatter' do
 
       result = formatter.call(*args)
 
-      tid = Thread.current.object_id.to_s(36)
       pid = ::Process.pid
-      expect(result).to eq("time=#{time.utc.iso8601(3)} pid=#{pid} tid=#{tid} severity=#{severity} message=\"#{message}\"\n")
+      expect(result).to eq("time=#{time.utc.iso8601(3)} pid=#{pid} tid=#{formatter.tid} severity=#{severity} message=\"#{message}\"\n")
     end
   end
 end
