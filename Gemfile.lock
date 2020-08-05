@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cm_logger (0.0.1)
+    cm_logger (0.0.3)
 
 GEM
   remote: https://rubygems.org/

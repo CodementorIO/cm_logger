@@ -3,7 +3,7 @@ $LOAD_PATH << lib_dir unless $LOAD_PATH.include?(lib_dir)
 
 Gem::Specification.new do |s|
   s.name        = 'cm_logger'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2020-04-09'
   s.summary     = "Log related stuff for Rails"
   s.description = "Log related stuff for Rails"
