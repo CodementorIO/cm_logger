@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.add_development_dependency("rspec", ["~> 3.9.0"])
-  s.add_development_dependency("sidekiq", ["~> 6.1.1"])
+  s.add_development_dependency("sidekiq", "~> 6.4.0")
 end
